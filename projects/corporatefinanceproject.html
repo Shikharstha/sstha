@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Amazon Financial Analysis — Corporate Finance project by Shikhar Shrestha. WACC, EVA, and divisional valuation of Amazon's three business segments. University of Arkansas MBA, FINN 51103." />
+  <title>Amazon Financial Analysis | Shikhar Shrestha</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141414'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' fill='%23E50914' font-family='Arial Black' font-size='22' font-weight='900'%3ES%3C/text%3E%3C/svg%3E" />
+  <style>
+    .project-hero {
+      padding: 140px 6% 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 36px;
+      transition: color 0.3s ease;
+    }
+    .back-link:hover { color: var(--netflix-red); }
+    .back-link svg { width: 14px; height: 14px; }
+
+    .project-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .meta-tag {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 2px;
+    }
+    .meta-tag-red {
+      color: var(--netflix-red);
+      border: 1px solid var(--netflix-red);
+      background: rgba(229,9,20,0.08);
+    }
+    .meta-tag-ghost {
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      background: rgba(255,255,255,0.03);
+    }
+    .project-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #bfbfbf 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .project-hero-sub {
+      font-family: var(--font-heading);
+      font-size: clamp(1rem, 1.6vw, 1.25rem);
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    .project-hero-sub span { color: var(--netflix-red); }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 16px;
+      margin: 48px 0;
+    }
+    .stat-box {
+      padding: 22px 18px;
+      background: linear-gradient(135deg, rgba(229,9,20,0.08) 0%, transparent 100%);
+      border: 1px solid rgba(229,9,20,0.2);
+      border-radius: 4px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .stat-box:hover { transform: translateY(-4px); }
+    .stat-box .num {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      color: var(--netflix-red);
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-box .lbl {
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .narrative-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 40px 0;
+    }
+    @media (max-width: 760px) { .narrative-grid { grid-template-columns: 1fr; } }
+    .narrative-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 30px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .narrative-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--netflix-red);
+    }
+    .narrative-card h3 {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--netflix-red);
+      margin-bottom: 14px;
+    }
+    .narrative-card p {
+      color: var(--text-secondary);
+      font-size: 0.97rem;
+      line-height: 1.8;
+    }
+
+    /* Team pills */
+    .team-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .team-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+    .team-pill:hover { border-color: var(--netflix-red); background: rgba(229,9,20,0.06); }
+    .team-pill-dot {
+      width: 8px; height: 8px;
+      background: var(--netflix-red);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .team-pill.you { border-color: rgba(229,9,20,0.4); }
+    .team-pill.you .team-pill-dot { box-shadow: 0 0 6px var(--netflix-red); }
+
+    /* Analysis grid — WACC & EVA tables */
+    .analysis-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 32px;
+    }
+    .analysis-header {
+      padding: 18px 26px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(255,255,255,0.02);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .analysis-header h4 {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .analysis-header .headline-num {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--netflix-red);
+      letter-spacing: 1px;
+    }
+    .division-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+    @media (max-width: 640px) { .division-grid { grid-template-columns: 1fr; } }
+    .division-cell {
+      padding: 22px 24px;
+      border-right: 1px solid var(--border-subtle);
+      transition: background 0.3s ease;
+    }
+    .division-cell:last-child { border-right: none; }
+    .division-cell:hover { background: rgba(255,255,255,0.02); }
+    .division-name {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .division-val {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .division-val.positive { color: #4ade80; }
+    .division-val.negative { color: var(--netflix-red); }
+    .division-val.neutral { color: var(--text-primary); }
+    .division-comps {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .division-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding: 12px 24px;
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(255,255,255,0.01);
+    }
+
+    /* EVA insight callout */
+    .eva-callout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    @media (max-width: 640px) { .eva-callout { grid-template-columns: 1fr; } }
+    .eva-cell {
+      padding: 24px 26px;
+      border-right: 1px solid var(--border-subtle);
+    }
+    .eva-cell:last-child { border-right: none; }
+    .eva-label {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .eva-value {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: #4ade80;
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .eva-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Stock performance */
+    .perf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .perf-card {
+      padding: 22px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    .perf-card:hover { border-color: var(--netflix-red); transform: translateY(-3px); }
+    .perf-ticker {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .perf-return {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .perf-return.up { color: #4ade80; }
+    .perf-return.mid { color: #facc15; }
+    .perf-return.down { color: var(--netflix-red); }
+    .perf-label {
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .perf-note {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background: rgba(229,9,20,0.06);
+      border-left: 3px solid var(--netflix-red);
+      border-radius: 2px;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Recommendations */
+    .rec-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 28px;
+    }
+    .rec-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .rec-card:hover {
+      border-color: var(--netflix-red);
+      transform: translateX(6px);
+      box-shadow: var(--shadow-lg);
+    }
+    .rec-num {
+      background: linear-gradient(180deg, var(--netflix-red) 0%, var(--netflix-red-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      color: #fff;
+      letter-spacing: 1px;
+      flex-shrink: 0;
+    }
+    .rec-body { padding: 22px 26px; }
+    .rec-title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .rec-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .rec-points li {
+      padding-left: 18px;
+      position: relative;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+    .rec-points li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 10px;
+      width: 8px; height: 2px;
+      background: var(--netflix-red);
+    }
+
+    /* Download cards */
+    .download-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 28px;
+    }
+    @media (max-width: 640px) { .download-row { grid-template-columns: 1fr; } }
+    .download-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 22px 24px;
+      transition: all 0.4s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .download-card:hover {
+      border-color: var(--netflix-red);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+      color: inherit;
+    }
+    .download-icon {
+      width: 44px; height: 44px;
+      background: rgba(229,9,20,0.1);
+      border: 1px solid rgba(229,9,20,0.3);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .download-icon svg { width: 20px; height: 20px; color: var(--netflix-red); }
+    .download-info h4 {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+    .download-info p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 640px) {
+      .rec-card { grid-template-columns: 52px 1fr; }
+      .rec-num { font-size: 1.3rem; }
+      .division-cell { border-right: none; border-bottom: 1px solid var(--border-subtle); }
+      .eva-cell { border-right: none; border-bottom: 1px solid var(--border-subtle); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">SHIKHAR<span>.</span></a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../experience.html">Experience</a></li>
+        <li><a href="../education.html">Education</a></li>
+        <li><a href="../projects.html" class="active">Projects</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="project-hero">
+    <a href="../projects.html" class="back-link reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Back to Projects
+    </a>
+
+    <div class="project-hero-meta reveal reveal-delay-1">
+      <span class="meta-tag meta-tag-red">Corporate Finance</span>
+      <span class="meta-tag meta-tag-ghost">University of Arkansas</span>
+      <span class="meta-tag meta-tag-ghost">FINN 51103</span>
+      <span class="meta-tag meta-tag-ghost">MBA · 2025</span>
+      <span class="meta-tag meta-tag-ghost">Team Project</span>
+    </div>
+
+    <h1 class="project-hero-title reveal reveal-delay-1">Amazon<br>Financial<br>Analysis</h1>
+    <p class="project-hero-sub reveal reveal-delay-2">
+      WACC · EVA · <span>Divisional Valuation · Strategic Recommendations</span>
+    </p>
+
+    <div class="stat-row">
+      <div class="stat-box reveal reveal-delay-1">
+        <div class="num">4</div>
+        <div class="lbl">Team Members</div>
+      </div>
+      <div class="stat-box reveal reveal-delay-1">
+        <div class="num">3</div>
+        <div class="lbl">Divisions Analyzed</div>
+      </div>
+      <div class="stat-box reveal reveal-delay-2">
+        <div class="num">8.60%</div>
+        <div class="lbl">Company-Wide WACC</div>
+      </div>
+      <div class="stat-box reveal reveal-delay-2">
+        <div class="num">$236B</div>
+        <div class="lbl">Market Value EVA</div>
+      </div>
+      <div class="stat-box reveal reveal-delay-3">
+        <div class="num">19</div>
+        <div class="lbl">Page Analysis</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <section class="section" style="padding-top: 0;">
+
+    <!-- TEAM -->
+    <div class="section-header">
+      <div class="section-label reveal">The Team</div>
+      <h2 class="section-title reveal reveal-delay-1">Collaborators</h2>
+    </div>
+    <div class="team-row">
+      <div class="team-pill you reveal">
+        <span class="team-pill-dot"></span>
+        Shikhar Shrestha
+      </div>
+      <div class="team-pill reveal reveal-delay-1">
+        <span class="team-pill-dot"></span>
+        Brandon Wallace
+      </div>
+      <div class="team-pill reveal reveal-delay-2">
+        <span class="team-pill-dot"></span>
+        Jathin Bokkisam
+      </div>
+      <div class="team-pill reveal reveal-delay-3">
+        <span class="team-pill-dot"></span>
+        Soumen Patel
+      </div>
+    </div>
+
+    <!-- NARRATIVE -->
+    <div class="narrative-grid" style="margin-top: 48px;">
+      <div class="narrative-card reveal">
+        <h3>The Challenge</h3>
+        <p>
+          Amazon operates three structurally different business segments — U.S. retail, international retail, and AWS — each with distinct risk profiles, cost structures, and growth trajectories. A single company-wide cost of capital obscures where Amazon actually creates and destroys value. The challenge was to isolate each division's true economic performance and surface the strategic implications hidden behind consolidated financials.
+        </p>
+      </div>
+      <div class="narrative-card reveal reveal-delay-1">
+        <h3>The Approach</h3>
+        <p>
+          Computed both a company-wide WACC (8.60%) and segment-specific WACCs using comparable public companies for each division — Walmart &amp; eBay for U.S. retail, regional risk-adjusted rates for international markets, and Equinix &amp; DigitalOcean for AWS. Applied Economic Value Added (EVA) analysis at the company and divisional level to measure true value creation, then benchmarked stock performance against Walmart and Alibaba to contextualize the results with strategic recommendations.
+        </p>
+      </div>
+    </div>
+
+    <!-- WACC ANALYSIS -->
+    <div class="section-header" style="margin-top: 70px;">
+      <div class="section-label reveal">Cost of Capital</div>
+      <h2 class="section-title reveal reveal-delay-1">WACC Analysis</h2>
+      <p class="section-subtitle reveal reveal-delay-2">
+        Divisional WACCs computed using comparable-company betas — isolating the risk profile of each segment rather than applying a blended company-wide rate.
+      </p>
+    </div>
+
+    <div class="analysis-block reveal">
+      <div class="analysis-header">
+        <h4>Company-Wide WACC</h4>
+        <span class="headline-num">8.60%</span>
+      </div>
+      <div class="division-grid">
+        <div class="division-cell">
+          <div class="division-name">U.S. National</div>
+          <div class="division-val neutral">7.47%</div>
+          <div class="division-comps">Comps: Walmart · eBay</div>
+        </div>
+        <div class="division-cell">
+          <div class="division-name">International</div>
+          <div class="division-val neutral">9.50%</div>
+          <div class="division-comps">Regional risk adjustments: Germany, UK, Japan &amp; other markets</div>
+        </div>
+        <div class="division-cell">
+          <div class="division-name">AWS</div>
+          <div class="division-val neutral">9.21%</div>
+          <div class="division-comps">Comps: Equinix · DigitalOcean</div>
+        </div>
+      </div>
+      <div class="division-note">
+        Weighted average of divisional WACCs: <strong>8.22%</strong> — a 0.38% difference from the top-down company-wide figure, validating the accuracy of the divisional methodology.
+      </div>
+    </div>
+
+    <!-- EVA ANALYSIS -->
+    <div class="section-header" style="margin-top: 70px;">
+      <div class="section-label reveal">Value Creation</div>
+      <h2 class="section-title reveal reveal-delay-1">Economic Value Added (EVA)</h2>
+      <p class="section-subtitle reveal reveal-delay-2">
+        EVA measures whether a business generates returns above its cost of capital — the true test of value creation beyond reported earnings.
+      </p>
+    </div>
+
+    <div class="analysis-block reveal">
+      <div class="analysis-header">
+        <h4>Company-Wide EVA</h4>
+        <span class="headline-num" style="color: #4ade80;">Positive</span>
+      </div>
+      <div class="eva-callout">
+        <div class="eva-cell">
+          <div class="eva-label">Book Value EVA</div>
+          <div class="eva-value">+$13.4B</div>
+          <div class="eva-desc">Amazon generates positive economic profit on a book-value basis — returns exceed the weighted cost of capital across the consolidated business.</div>
+        </div>
+        <div class="eva-cell">
+          <div class="eva-label">Market Value EVA</div>
+          <div class="eva-value">+$236B</div>
+          <div class="eva-desc">Market participants price in significant future value creation, reflecting confidence in AWS's growth trajectory and Amazon's long-term competitive position.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-block reveal" style="margin-top: 20px;">
+      <div class="analysis-header">
+        <h4>Divisional EVA</h4>
+        <span style="font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);">Where Value Is Created vs. Destroyed</span>
+      </div>
+      <div class="division-grid">
+        <div class="division-cell">
+          <div class="division-name">AWS</div>
+          <div class="division-val positive">+$24.1B</div>
+          <div class="division-comps">Primary value driver — high margins, scalability, and structural competitive advantage drive returns well above cost of capital.</div>
+        </div>
+        <div class="division-cell">
+          <div class="division-name">U.S. National</div>
+          <div class="division-val negative">−$1.8B</div>
+          <div class="division-comps">Negative EVA driven by narrow retail margins and high logistics costs — scale has not yet translated to value creation.</div>
+        </div>
+        <div class="division-cell">
+          <div class="division-name">International</div>
+          <div class="division-val negative">−$7.1B</div>
+          <div class="division-comps">Largest value detractor — expansion costs, higher country risk premiums, and thin margins make international the most capital-intensive drag on returns.</div>
+        </div>
+      </div>
+      <div class="division-note">
+        AWS subsidizes the retail segments. Without AWS's $24.1B EVA, the consolidated business would show significant net value destruction.
+      </div>
+    </div>
+
+    <!-- STOCK PERFORMANCE -->
+    <div class="section-header" style="margin-top: 70px;">
+      <div class="section-label reveal">Market Performance</div>
+      <h2 class="section-title reveal reveal-delay-1">Stock Performance (2022 – Present)</h2>
+      <p class="section-subtitle reveal reveal-delay-2">
+        Benchmarked Amazon against Walmart (domestic retail peer) and Alibaba (international retail peer) alongside the Nasdaq Composite.
+      </p>
+    </div>
+
+    <div class="perf-grid reveal">
+      <div class="perf-card">
+        <div class="perf-ticker">WMT</div>
+        <div class="perf-return up">+76.86%</div>
+        <div class="perf-label">Walmart · Outperformer</div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-ticker">NDX</div>
+        <div class="perf-return mid">+21.98%</div>
+        <div class="perf-label">Nasdaq Composite · Benchmark</div>
+      </div>
+      <div class="perf-card">
+        <div class="perf-ticker">AMZN</div>
+        <div class="perf-return mid">+19.69%</div>
+        <div class="perf-label">Amazon · Near-Index Returns</div>
+      </div>
+    </div>
+
+    <div class="perf-note reveal">
+      Amazon underperformed Walmart by more than 57 percentage points over the analysis period despite significantly higher revenue growth, reinforcing the EVA finding that growth alone does not drive shareholder value — returns on invested capital relative to cost of capital do. Amazon outperformed Alibaba on the international side, reflecting superior execution despite the negative EVA in that segment.
+    </div>
+
+    <!-- STRATEGIC RECOMMENDATIONS -->
+    <div class="section-header" style="margin-top: 70px;">
+      <div class="section-label reveal">Conclusions</div>
+      <h2 class="section-title reveal reveal-delay-1">Strategic Recommendations</h2>
+      <p class="section-subtitle reveal reveal-delay-2">
+        Three actionable recommendations derived from the WACC and EVA analysis — focused on closing the gap between Amazon's growth narrative and actual economic value creation.
+      </p>
+    </div>
+
+    <div class="rec-list">
+      <div class="rec-card reveal">
+        <div class="rec-num">01</div>
+        <div class="rec-body">
+          <div class="rec-title">Enhance Retail Efficiency — Shift from Scale to Profitability</div>
+          <ul class="rec-points">
+            <li>Optimize logistics and cost structures to close the margin gap that drives negative EVA in U.S. retail.</li>
+            <li>Leverage automation and AI to reduce fulfillment costs without sacrificing delivery speed.</li>
+            <li>Prioritize unit economics over GMV growth — retail scale has not generated above-cost-of-capital returns.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rec-card reveal reveal-delay-1">
+        <div class="rec-num">02</div>
+        <div class="rec-body">
+          <div class="rec-title">Realign Capital Allocation — Prioritize Value-Creating Segments</div>
+          <ul class="rec-points">
+            <li>Accelerate capital deployment into AWS, advertising, and Prime — the segments generating positive EVA.</li>
+            <li>Reduce marginal investment in low-return retail expansion until unit economics improve.</li>
+            <li>Use divisional WACC as a capital allocation hurdle rate, not the blended company-wide rate.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="rec-card reveal reveal-delay-2">
+        <div class="rec-num">03</div>
+        <div class="rec-body">
+          <div class="rec-title">Reassess International Footprint — Concentrate on Profitable Markets</div>
+          <ul class="rec-points">
+            <li>Evaluate underperforming international markets with a value-creation lens, not market-share ambition.</li>
+            <li>Reduce exposure to regions where country risk premiums and thin margins produce deeply negative EVA.</li>
+            <li>Reallocate freed international capital to AWS international expansion where returns are substantially higher.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOWNLOADS -->
+    <div class="section-header" style="margin-top: 70px;">
+      <div class="section-label reveal">Deliverables</div>
+      <h2 class="section-title reveal reveal-delay-1">Project Documents</h2>
+    </div>
+
+    <div class="download-row reveal">
+      <a
+        href="../assets/projects/CorporateFinance - University of Arkansas/Finance Project - AMZN Analysis.pdf"
+        target="_blank"
+        rel="noopener"
+        class="download-card"
+      >
+        <div class="download-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <polyline points="9 15 12 18 15 15"></polyline>
+          </svg>
+        </div>
+        <div class="download-info">
+          <h4>AMZN Financial Analysis</h4>
+          <p>PDF · 19 Pages · FINN 51103 · University of Arkansas</p>
+        </div>
+      </a>
+      <a
+        href="../assets/projects/CorporateFinance - University of Arkansas/AMZN-Q4-2024-Earnings-Release.pdf"
+        target="_blank"
+        rel="noopener"
+        class="download-card"
+      >
+        <div class="download-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="12" y1="18" x2="12" y2="12"></line>
+            <polyline points="9 15 12 18 15 15"></polyline>
+          </svg>
+        </div>
+        <div class="download-info">
+          <h4>Amazon Q4 2024 Earnings Release</h4>
+          <p>PDF · 13 Pages · Official Source Material · Feb 2025</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- TOOLS & METHODS -->
+    <div class="skills-section">
+      <div class="section-header">
+        <div class="section-label reveal">Toolkit</div>
+        <h2 class="section-title reveal reveal-delay-1">Methods &amp; Tools</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-group reveal">
+          <h4>Financial Analysis</h4>
+          <div class="skill-pills">
+            <span class="skill-pill">WACC</span>
+            <span class="skill-pill">Economic Value Added (EVA)</span>
+            <span class="skill-pill">Divisional Valuation</span>
+            <span class="skill-pill">Comparable Company Analysis</span>
+            <span class="skill-pill">Country Risk Premium</span>
+          </div>
+        </div>
+        <div class="skill-group reveal reveal-delay-1">
+          <h4>Data Sources</h4>
+          <div class="skill-pills">
+            <span class="skill-pill">Amazon 10-K</span>
+            <span class="skill-pill">Q4 2024 Earnings Release</span>
+            <span class="skill-pill">MarketWatch</span>
+            <span class="skill-pill">Yahoo Finance</span>
+            <span class="skill-pill">Damodaran Risk Premiums</span>
+          </div>
+        </div>
+        <div class="skill-group reveal reveal-delay-2">
+          <h4>Skills Applied</h4>
+          <div class="skill-pills">
+            <span class="skill-pill">Financial Modeling</span>
+            <span class="skill-pill">Strategic Analysis</span>
+            <span class="skill-pill">Capital Allocation</span>
+            <span class="skill-pill">Segment Benchmarking</span>
+            <span class="skill-pill">Executive Presentation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="../index.html">Home</a>
+      <a href="../experience.html">Experience</a>
+      <a href="../education.html">Education</a>
+      <a href="../projects.html">Projects</a>
+    </div>
+    <p>© <span id="year"></span> Shikhar Shrestha · Fort Worth, Texas</p>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

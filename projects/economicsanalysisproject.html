@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Airbnb Business Model Analysis — Economics project by Shikhar Shrestha. Asset-light platform economics, revenue streams, cost structure, price elasticity, and competitive positioning. University of Arkansas MBA." />
+  <title>Airbnb Business Model Analysis | Shikhar Shrestha</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23141414'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' fill='%23E50914' font-family='Arial Black' font-size='22' font-weight='900'%3ES%3C/text%3E%3C/svg%3E" />
+  <style>
+    .project-hero {
+      padding: 140px 6% 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 36px;
+      transition: color 0.3s ease;
+    }
+    .back-link:hover { color: var(--netflix-red); }
+    .back-link svg { width: 14px; height: 14px; }
+
+    .project-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .meta-tag {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 2px;
+    }
+    .meta-tag-red {
+      color: var(--netflix-red);
+      border: 1px solid var(--netflix-red);
+      background: rgba(229,9,20,0.08);
+    }
+    .meta-tag-ghost {
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      background: rgba(255,255,255,0.03);
+    }
+    .project-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #bfbfbf 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .project-hero-sub {
+      font-family: var(--font-heading);
+      font-size: clamp(1rem, 1.6vw, 1.25rem);
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    .project-hero-sub span { color: var(--netflix-red); }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin: 48px 0;
+    }
+    .stat-box {
+      padding: 22px 18px;
+      background: linear-gradient(135deg, rgba(229,9,20,0.08) 0%, transparent 100%);
+      border: 1px solid rgba(229,9,20,0.2);
+      border-radius: 4px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .stat-box:hover { transform: translateY(-4px); }
+    .stat-box .num {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--netflix-red);
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-box .lbl {
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .narrative-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 40px 0;
+    }
+    @media (max-width: 760px) { .narrative-grid { grid-template-columns: 1fr; } }
+    .narrative-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 30px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .narrative-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: var(--netflix-red);
+    }
+    .narrative-card h3 {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--netflix-red);
+      margin-bottom: 14px;
+    }
+    .narrative-card p {
+      color: var(--text-secondary);
+      font-size: 0.97rem;
+      line-height: 1.8;
+    }
+
+    .section-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 6% 80px;
+    }
+    .section-label-sm {
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--netflix-red);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .section-title-sm {
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .section-subtitle-sm {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      max-width: 680px;
+      margin-bottom: 32px;
+    }
+
+    /* Revenue streams grid */
+    .revenue-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .revenue-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 24px 20px;
+      transition: all 0.3s ease;
+    }
+    .revenue-card:hover { border-color: rgba(229,9,20,0.3); transform: translateY(-3px); }
+    .revenue-card .rev-icon {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .revenue-card .rev-title {
+      font-family: var(--font-heading);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .revenue-card .rev-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .revenue-card.primary { border-color: rgba(229,9,20,0.25); background: linear-gradient(135deg, rgba(229,9,20,0.06) 0%, transparent 100%); }
+    .revenue-card.primary .rev-title { color: var(--netflix-red); }
+
+    /* Cost structure */
+    .cost-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 28px;
+    }
+    @media (max-width: 680px) { .cost-grid { grid-template-columns: 1fr; } }
+    .cost-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .cost-block-header {
+      padding: 14px 20px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border-subtle);
+      font-family: var(--font-heading);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .cost-block-header.fixed { color: #fbbf24; }
+    .cost-block-header.variable { color: #60a5fa; }
+    .cost-block ul {
+      list-style: none;
+      padding: 16px 20px;
+      margin: 0;
+    }
+    .cost-block ul li {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+    .cost-block ul li:last-child { border-bottom: none; }
+    .cost-block ul li::before {
+      content: '—';
+      color: var(--netflix-red);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Elasticity / market analysis */
+    .analysis-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 32px;
+    }
+    .analysis-header {
+      padding: 18px 26px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(255,255,255,0.02);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .analysis-header h4 {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .analysis-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .analysis-table th {
+      background: rgba(255,255,255,0.04);
+      padding: 12px 20px;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .analysis-table td {
+      padding: 14px 20px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+    }
+    .analysis-table tr:last-child td { border-bottom: none; }
+    .analysis-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .analysis-table td.label-col { color: var(--text-primary); font-weight: 500; white-space: nowrap; }
+    .analysis-table td.elastic { color: #f87171; font-weight: 600; }
+    .analysis-table td.inelastic { color: #4ade80; font-weight: 600; }
+
+    /* Findings cards */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .finding-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 24px 22px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .finding-card:hover { border-color: rgba(229,9,20,0.3); transform: translateY(-3px); }
+    .finding-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--netflix-red), transparent);
+    }
+    .finding-card .find-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: rgba(229,9,20,0.3);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .finding-card .find-title {
+      font-family: var(--font-heading);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+    .finding-card .find-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* Metrics row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .kpi-card {
+      background: linear-gradient(135deg, rgba(229,9,20,0.06) 0%, transparent 100%);
+      border: 1px solid rgba(229,9,20,0.18);
+      border-radius: 6px;
+      padding: 20px;
+      text-align: center;
+    }
+    .kpi-card .kpi-val {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      color: var(--netflix-red);
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .kpi-card .kpi-lbl {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .download-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 22px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      margin-top: 28px;
+      max-width: 420px;
+    }
+    .download-card:hover { border-color: var(--netflix-red); background: rgba(229,9,20,0.05); transform: translateY(-2px); }
+    .download-icon {
+      width: 44px; height: 44px;
+      background: rgba(229,9,20,0.15);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .download-info .dl-title {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .download-info .dl-sub {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border-subtle);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">SHIKHAR<span>.</span></a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../experience.html">Experience</a></li>
+        <li><a href="../education.html">Education</a></li>
+        <li><a href="../projects.html">Projects</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="project-hero">
+    <a href="../projects.html" class="back-link">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2L4 7l5 5"/></svg>
+      All Projects
+    </a>
+
+    <div class="project-hero-meta">
+      <span class="meta-tag meta-tag-red">Economics</span>
+      <span class="meta-tag meta-tag-ghost">University of Arkansas</span>
+      <span class="meta-tag meta-tag-ghost">MBA · 2025</span>
+      <span class="meta-tag meta-tag-ghost">Individual Project</span>
+    </div>
+
+    <h1 class="project-hero-title">Airbnb<br>Business Model Analysis</h1>
+    <p class="project-hero-sub">
+      Platform Economics <span>·</span> Revenue Streams <span>·</span> Cost Structure <span>·</span> Price Elasticity <span>·</span> Competitive Positioning
+    </p>
+
+    <div class="stat-row">
+      <div class="stat-box reveal">
+        <div class="num">220+</div>
+        <div class="lbl">Countries<br>of Operation</div>
+      </div>
+      <div class="stat-box reveal reveal-delay-1">
+        <div class="num">$11B+</div>
+        <div class="lbl">2024 Annual<br>Revenue</div>
+      </div>
+      <div class="stat-box reveal reveal-delay-2">
+        <div class="num">491M</div>
+        <div class="lbl">Nights &amp; Experiences<br>Booked (2024)</div>
+      </div>
+      <div class="stat-box reveal reveal-delay-3">
+        <div class="num">19%</div>
+        <div class="lbl">Net Income Margin<br>Q4 2024</div>
+      </div>
+      <div class="stat-box reveal reveal-delay-4">
+        <div class="num">$80B</div>
+        <div class="lbl">Company<br>Valuation</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- NARRATIVE -->
+  <div class="section-wrap">
+    <div class="section-label-sm reveal">The Setup</div>
+    <h2 class="section-title-sm reveal reveal-delay-1">Challenge &amp; Approach</h2>
+
+    <div class="narrative-grid">
+      <div class="narrative-card reveal">
+        <h3>The Challenge</h3>
+        <p>
+          Analyze how Airbnb's platform-based, asset-light business model generates competitive advantage and sustained profitability without owning physical assets. The analysis needed to explain the economics driving Airbnb's growth — revenue structure, cost dynamics, price elasticity, market power, and exposure to demand uncertainty — and assess the strategic sustainability of the model in a competitive, regulated marketplace.
+        </p>
+      </div>
+      <div class="narrative-card reveal reveal-delay-1">
+        <h3>The Approach</h3>
+        <p>
+          Applied core economics frameworks — production function analysis, cost structure decomposition, price elasticity of demand, economies of scale and scope, and monopolistic competition theory — to Airbnb's publicly reported financials and business disclosures. Synthesized five years of financial performance data alongside Q4 2024 earnings results to assess how Airbnb's model drives profitability while managing regulatory headwinds, seasonal demand uncertainty, and intensifying platform competition.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- REVENUE STREAMS -->
+  <div class="section-wrap">
+    <div class="section-label-sm reveal">Business Model</div>
+    <h2 class="section-title-sm reveal reveal-delay-1">Revenue Streams</h2>
+    <p class="section-subtitle-sm reveal reveal-delay-2">
+      Airbnb's asset-light model earns revenue from both sides of its marketplace — guests and hosts — without owning any properties.
+    </p>
+
+    <div class="revenue-grid reveal">
+      <div class="revenue-card primary">
+        <div class="rev-icon">🏠</div>
+        <div class="rev-title">Host Service Fees</div>
+        <div class="rev-desc">Charged to hosts per booking as a percentage of the reservation subtotal. Primary revenue driver across the platform.</div>
+      </div>
+      <div class="revenue-card primary">
+        <div class="rev-icon">✈️</div>
+        <div class="rev-title">Guest Service Fees</div>
+        <div class="rev-desc">Charged to guests at booking. Typically 14–16% of the reservation total, covering platform costs and guest protections.</div>
+      </div>
+      <div class="revenue-card">
+        <div class="rev-icon">⭐</div>
+        <div class="rev-title">Airbnb Plus</div>
+        <div class="rev-desc">Premium tier for verified high-quality listings meeting stricter design and hospitality standards.</div>
+      </div>
+      <div class="revenue-card">
+        <div class="rev-icon">💼</div>
+        <div class="rev-title">Airbnb for Work</div>
+        <div class="rev-desc">Corporate travel program targeting business travelers and enterprise expense management.</div>
+      </div>
+      <div class="revenue-card">
+        <div class="rev-icon">🎭</div>
+        <div class="rev-title">Experiences</div>
+        <div class="rev-desc">Locally led activities and cultural immersion offerings that expand the platform beyond accommodation.</div>
+      </div>
+      <div class="revenue-card">
+        <div class="rev-icon">📣</div>
+        <div class="rev-title">Advertising &amp; Promotions</div>
+        <div class="rev-desc">Sponsored listings and promotional placements within the platform's search results and discovery surfaces.</div>
+      </div>
+    </div>
+
+    <div class="kpi-row reveal" style="margin-top:36px;">
+      <div class="kpi-card">
+        <div class="kpi-val">$11B+</div>
+        <div class="kpi-lbl">Total 2024 Revenue<br>(12% YoY Growth)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val">$2.65B</div>
+        <div class="kpi-lbl">Net Income<br>(Most Recent)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val">$461M</div>
+        <div class="kpi-lbl">EBITDA<br>Q4 2024</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val">19%</div>
+        <div class="kpi-lbl">Net Income Margin<br>Q4 2024</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- COST STRUCTURE -->
+  <div class="section-wrap">
+    <div class="section-label-sm reveal">Cost Economics</div>
+    <h2 class="section-title-sm reveal reveal-delay-1">Cost Structure</h2>
+    <p class="section-subtitle-sm reveal reveal-delay-2">
+      Despite owning no physical properties, Airbnb carries a complex cost structure with meaningful fixed obligations in technology and compliance alongside demand-driven variable costs.
+    </p>
+
+    <div class="cost-grid reveal">
+      <div class="cost-block">
+        <div class="cost-block-header fixed">Fixed Costs</div>
+        <ul>
+          <li>Technology infrastructure — cloud, servers, platform maintenance</li>
+          <li>Regulatory compliance and legal operations across 220+ jurisdictions</li>
+          <li>Customer service and trust &amp; safety operations</li>
+          <li>Fraud prevention systems running continuously regardless of volume</li>
+          <li>Brand and corporate marketing infrastructure</li>
+          <li>AI/ML development and product engineering headcount</li>
+        </ul>
+      </div>
+      <div class="cost-block">
+        <div class="cost-block-header variable">Variable Costs</div>
+        <ul>
+          <li>Marketing spend and host incentives scaled to demand conditions</li>
+          <li>Dispute resolution, refunds, and damage claim processing</li>
+          <li>Payment processing fees per transaction</li>
+          <li>Customer support surge capacity during peak demand periods</li>
+          <li>Promotional discounts to attract guests and hosts in competitive markets</li>
+          <li>Additional staffing for high-conflict or high-volume periods</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="narrative-grid" style="margin-top:24px;">
+      <div class="narrative-card reveal">
+        <h3>Economies of Scale</h3>
+        <p>
+          With 491 million nights booked in 2024, Airbnb's fixed platform infrastructure costs are spread across an enormous transaction base — lowering average cost per booking as volume grows. A larger user base also generates more reviews organically, improving listing quality and reducing customer service demand without proportional cost increases.
+        </p>
+      </div>
+      <div class="narrative-card reveal reveal-delay-1">
+        <h3>Economies of Scope</h3>
+        <p>
+          Airbnb leverages the same platform, customer base, brand, and support infrastructure across accommodations, Experiences, Airbnb for Work, and international expansion. This multi-product, multi-market strategy reduces marginal cost per new service and creates cross-selling opportunities that increase lifetime value per user.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- PRICE ELASTICITY & COMPETITION -->
+  <div class="section-wrap">
+    <div class="section-label-sm reveal">Market Dynamics</div>
+    <h2 class="section-title-sm reveal reveal-delay-1">Price Elasticity of Demand</h2>
+    <p class="section-subtitle-sm reveal reveal-delay-2">
+      Airbnb's demand elasticity varies significantly by segment, listing type, traveler purpose, and competitive alternatives — creating a complex pricing environment rather than a single elasticity value.
+    </p>
+
+    <div class="analysis-block reveal">
+      <div class="analysis-header">
+        <h4>Elasticity by Segment</h4>
+        <span style="font-size:0.78rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted);">Monopolistic Competition Framework</span>
+      </div>
+      <table class="analysis-table">
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Elasticity</th>
+            <th>Rationale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-col">Budget / Urban listings</td>
+            <td class="elastic">Highly Elastic</td>
+            <td>Abundant hotel and VRBO/Booking.com alternatives create high price sensitivity</td>
+          </tr>
+          <tr>
+            <td class="label-col">Unique / Remote properties</td>
+            <td class="inelastic">Inelastic</td>
+            <td>Treehouses, yurts, rural getaways offer experiences hotels cannot replicate</td>
+          </tr>
+          <tr>
+            <td class="label-col">Business travelers</td>
+            <td class="elastic">More Elastic</td>
+            <td>Prefer hotels for loyalty programs; Airbnb must compete on price and convenience</td>
+          </tr>
+          <tr>
+            <td class="label-col">Peak events / Festivals</td>
+            <td class="inelastic">Inelastic</td>
+            <td>Scarcity of accommodation options during festivals makes guests willing to pay premium</td>
+          </tr>
+          <tr>
+            <td class="label-col">Luxury / Long-stay</td>
+            <td class="inelastic">Less Elastic</td>
+            <td>Differentiated product with limited direct substitutes at the high end</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="analysis-block reveal" style="margin-top:24px;">
+      <div class="analysis-header">
+        <h4>Competitive Landscape</h4>
+      </div>
+      <table class="analysis-table">
+        <thead>
+          <tr>
+            <th>Competitor / Threat</th>
+            <th>Nature</th>
+            <th>Airbnb's Differentiator</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label-col">VRBO</td>
+            <td>Direct platform rival</td>
+            <td>Broader listing variety; stronger community &amp; Experiences offering</td>
+          </tr>
+          <tr>
+            <td class="label-col">Booking.com / Expedia</td>
+            <td>OTA platform rivals</td>
+            <td>Unique/non-traditional inventory; peer-to-peer trust model</td>
+          </tr>
+          <tr>
+            <td class="label-col">Traditional Hotels</td>
+            <td>Substitutes</td>
+            <td>Asset-light flexibility, local authenticity, unique stays</td>
+          </tr>
+          <tr>
+            <td class="label-col">NYC &amp; City Regulations</td>
+            <td>Regulatory threat</td>
+            <td>Supply reduction risk; lobbying &amp; compliance adaptation</td>
+          </tr>
+          <tr>
+            <td class="label-col">New Entrants</td>
+            <td>Potential threat</td>
+            <td>Network effects create high entry barriers; brand moat</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- KEY FINDINGS -->
+  <div class="section-wrap">
+    <div class="section-label-sm reveal">Diagnostics</div>
+    <h2 class="section-title-sm reveal reveal-delay-1">Key Findings</h2>
+
+    <div class="findings-grid reveal">
+      <div class="finding-card">
+        <div class="find-num">01</div>
+        <div class="find-title">Asset-Light Advantage</div>
+        <div class="find-desc">Airbnb's production function minimizes capital expenditure by owning no properties, allowing margins to exceed traditional hotel chains. Higher margins are sustained structurally, not cyclically.</div>
+      </div>
+      <div class="finding-card">
+        <div class="find-num">02</div>
+        <div class="find-title">Network Effects Moat</div>
+        <div class="find-desc">More hosts attract more guests; more guests attract more hosts. This flywheel compounds platform value, creates high entry barriers, and reduces customer acquisition costs as the platform scales.</div>
+      </div>
+      <div class="finding-card">
+        <div class="find-num">03</div>
+        <div class="find-title">Demand Uncertainty Risk</div>
+        <div class="find-desc">Fixed platform costs persist through demand shocks — pandemics, geopolitical events, regulatory changes like NYC's 2023 short-term rental law. These shocks compress margins without proportional cost relief.</div>
+      </div>
+      <div class="finding-card">
+        <div class="find-num">04</div>
+        <div class="find-title">Monopolistic Competition</div>
+        <div class="find-desc">Airbnb operates with pricing power in differentiated segments but faces competitive pressure from VRBO, Booking.com, and hotels. It is not a price-setter in urban commodity-like listings.</div>
+      </div>
+      <div class="finding-card">
+        <div class="find-num">05</div>
+        <div class="find-title">Growth Recommendation</div>
+        <div class="find-desc">Expanding long-term stays, corporate travel, and new Experiences categories would deepen economies of scope, improve revenue stability, and reduce dependence on highly elastic leisure-travel demand.</div>
+      </div>
+      <div class="finding-card">
+        <div class="find-num">06</div>
+        <div class="find-title">Co-Host Network Expansion</div>
+        <div class="find-desc">Launch of the Co-Host Network streamlined hosting for 100,000+ listings across 10 countries. Planned expansion to Japan and Korea signals international supply-side scaling as a near-term growth lever.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- DOWNLOAD -->
+  <div class="section-wrap">
+    <div class="section-label-sm reveal">Supporting Materials</div>
+    <h2 class="section-title-sm reveal reveal-delay-1">Project Download</h2>
+
+    <a href="../assets/projects/Economics - UniversityofArkansas/Airbnb Business Model Analysis - Shikhar Shrestha.pdf" target="_blank" class="download-card reveal">
+      <div class="download-icon">📄</div>
+      <div class="download-info">
+        <div class="dl-title">Airbnb Business Model Analysis</div>
+        <div class="dl-sub">Full Written Report · PDF · 6 Pages</div>
+      </div>
+    </a>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- SKILLS -->
+  <div class="section-wrap">
+    <div class="skills-section">
+      <div class="section-label-sm reveal">Toolkit</div>
+      <h2 class="section-title-sm reveal reveal-delay-1">Frameworks &amp; Methods</h2>
+      <div class="skills-grid reveal reveal-delay-2" style="margin-top:28px;">
+        <div class="skill-group">
+          <div class="skill-group-label">Economic Frameworks</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Production Function Analysis</span>
+            <span class="skill-pill">Price Elasticity of Demand</span>
+            <span class="skill-pill">Economies of Scale &amp; Scope</span>
+            <span class="skill-pill">Monopolistic Competition</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Business Analysis</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Business Model Analysis</span>
+            <span class="skill-pill">Cost Structure Decomposition</span>
+            <span class="skill-pill">Competitive Positioning</span>
+            <span class="skill-pill">Platform Economics</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Research</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Financial Statement Analysis</span>
+            <span class="skill-pill">Earnings Report Analysis</span>
+            <span class="skill-pill">Industry Research</span>
+            <span class="skill-pill">Strategic Recommendation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="../index.html">Home</a>
+      <a href="../experience.html">Experience</a>
+      <a href="../education.html">Education</a>
+      <a href="../projects.html">Projects</a>
+    </div>
+    <p>© <span id="year"></span> Shikhar Shrestha · Fort Worth, Texas</p>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext \"/c/Users/Shikhar S/Desktop/Resumes/Personal Portfolio Site/shikhar_shrestha_portfolio_profile/assets/projects/HumanCenteredDesign - UniversityofArkansas/Course Project/Shared Fences Co - Customer Discovery Plan & Materials \\(2\\).pdf\" /tmp/extracted_text.txt)",
+      "Read(//tmp/**)",
+      "Bash(pdftotext \"Price Gouging Claims, Accounting Analysis, and Disclosure Strategies - An Australian Case Study 20240510.pdf\" -)"
+    ]
+  }
+}
